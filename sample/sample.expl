@@ -1,0 +1,19 @@
+decl
+    int a, b, c, t, x, y;
+enddecl
+begin
+    t = 2 + 3;
+    x = t * 4;
+    y = 10 / 2 + 1;
+    read(a);
+    read(b);
+    c = a + b * 2;
+    while (c > 0) do
+        if (c == 5) then
+            break;
+        endif
+        c = c - 1;
+    endwhile
+    write(c);
+    return 0;
+end

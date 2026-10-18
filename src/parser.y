@@ -29,7 +29,7 @@ void yyerror(const char *message);
     DataType dtype;
 }
 
-%token DECL ENDDECL BEGIN END
+%token DECL ENDDECL BEG END
 %token INT STR
 %token IF THEN ELSE ENDIF
 %token WHILE DO ENDWHILE
@@ -61,7 +61,7 @@ void yyerror(const char *message);
 %%
 
 program
-    : DECL declarations ENDDECL BEGIN statements END
+    : DECL declarations ENDDECL BEG statements END
       {
           parse_result = make_program($2, $5);
       }

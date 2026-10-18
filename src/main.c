@@ -3,12 +3,15 @@
 #include "tacread.h"
 #include "blocks.h"
 #include "stats.h"
+#include "ast.h"
+#include "tacgen.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-/* External linkages to teammates' modules or local stubs */
-extern Quad *gen_tac(void *ast_root, int *n);
+extern FILE *yyin;
+extern int yyparse(void);
+extern Program *parse_result;
 extern Quad *optimize_block(Block *b, int *n);
 
 static void get_base_name(const char *path, char *base) {
@@ -46,7 +49,6 @@ int main(int argc, char **argv) {
 
     char base[128];
     get_base_name(input_path, base);
-
     stats_reset();
 
     Quad *unopt_quads = NULL;
@@ -61,8 +63,19 @@ int main(int argc, char **argv) {
         unopt_quads = read_tac(tf, &unopt_n);
         fclose(tf);
     } else {
-        /* Calls front-end parser and TAC generator */
-        unopt_quads = gen_tac(NULL, &unopt_n);
+        yyin = fopen(input_path, "r");
+        if (!yyin) {
+            perror("Failed to open input ExpL file");
+            return 1;
+        }
+        if (yyparse() != 0 || !parse_result) {
+            fprintf(stderr, "Parsing failed on source: %s\n", input_path);
+            fclose(yyin);
+            return 1;
+        }
+        fclose(yyin);
+
+        unopt_quads = gen_tac(parse_result, &unopt_n);
     }
 
     stats.quads_before = unopt_n;
@@ -76,11 +89,11 @@ int main(int argc, char **argv) {
         fclose(f_unopt);
     }
 
-    /* Partition into basic blocks */
+    /* ALSU 8.4: Basic block partitioning */
     int nb = 0;
     Block *blocks = split_blocks(unopt_quads, unopt_n, &nb);
 
-    /* Optimize blocks and aggregate */
+    /* Local block optimization */
     QList opt_list;
     qlist_init(&opt_list);
 
@@ -104,12 +117,12 @@ int main(int argc, char **argv) {
         fclose(f_opt);
     }
 
-    /* Write statistics report */
+    /* Write optimization statistics */
     char stats_filename[256];
     snprintf(stats_filename, sizeof(stats_filename), "%s/%s.stats.txt", outdir, base);
     write_stats(stats_filename, input_path);
 
-    /* Cleanup */
+    /* Free allocated resources */
     if (unopt_quads) free(unopt_quads);
     free_blocks(blocks, nb);
     qlist_free(&opt_list);

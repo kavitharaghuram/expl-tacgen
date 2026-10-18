@@ -39,7 +39,7 @@ STRING      \"([^\"\\\n]|\\.)*\"
 
 "decl"                  return DECL;
 "enddecl"               return ENDDECL;
-"begin"                 return BEGIN;
+"begin"                 return BEG;
 "end"                   return END;
 
 "int"                   return INT;
