@@ -1,0 +1,7 @@
+ExpL TAC Optimizer statistics
+Source file          : sample/order_test.expl
+Basic blocks         : 1
+Quads before         : 3
+Quads after          : 2
+Constant foldings    : 0
+CSE eliminations     : 0

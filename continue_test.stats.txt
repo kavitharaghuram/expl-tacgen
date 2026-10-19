@@ -1,0 +1,7 @@
+ExpL TAC Optimizer statistics
+Source file          : sample/continue_test.expl
+Basic blocks         : 8
+Quads before         : 15
+Quads after          : 14
+Constant foldings    : 0
+CSE eliminations     : 0

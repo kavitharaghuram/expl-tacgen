@@ -1,0 +1,7 @@
+ExpL TAC Optimizer statistics
+Source file          : sample/test_relations.expl
+Basic blocks         : 19
+Quads before         : 32
+Quads after          : 32
+Constant foldings    : 0
+CSE eliminations     : 0

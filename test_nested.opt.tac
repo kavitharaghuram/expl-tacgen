@@ -1,0 +1,17 @@
+i = 2
+L1:
+if i > 0 goto L2
+goto L3
+L2:
+j = 2
+L4:
+if j > 0 goto L5
+goto L6
+L5:
+write j
+j = j - 1
+goto L4
+L6:
+i = i - 1
+goto L1
+L3:

@@ -1,0 +1,7 @@
+ExpL TAC Optimizer statistics
+Source file          : sample/test_nested.expl
+Basic blocks         : 9
+Quads before         : 19
+Quads after          : 17
+Constant foldings    : 0
+CSE eliminations     : 0

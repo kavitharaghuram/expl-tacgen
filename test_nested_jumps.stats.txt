@@ -1,0 +1,7 @@
+ExpL TAC Optimizer statistics
+Source file          : sample/test_nested_jumps.expl
+Basic blocks         : 15
+Quads before         : 29
+Quads after          : 27
+Constant foldings    : 0
+CSE eliminations     : 0

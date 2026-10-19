@@ -1,0 +1,7 @@
+ExpL TAC Optimizer statistics
+Source file          : sample/if_else.expl
+Basic blocks         : 5
+Quads before         : 9
+Quads after          : 9
+Constant foldings    : 0
+CSE eliminations     : 0

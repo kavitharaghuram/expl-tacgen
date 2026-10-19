@@ -1,0 +1,7 @@
+ExpL TAC Optimizer statistics
+Source file          : sample/test_dependencies.expl
+Basic blocks         : 1
+Quads before         : 9
+Quads after          : 7
+Constant foldings    : 0
+CSE eliminations     : 0
