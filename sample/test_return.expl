@@ -1,0 +1,10 @@
+decl
+    int x;
+enddecl
+begin
+    x = 4;
+    if (x > 0) then
+        write(x);
+    endif
+    return 0;
+end

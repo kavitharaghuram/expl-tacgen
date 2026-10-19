@@ -1,0 +1,14 @@
+decl
+    int x;
+enddecl
+begin
+    x = 5;
+    while (x > 0) do
+        if (x == 3) then
+            break;
+        endif
+        write(x);
+        x = x - 1;
+    endwhile
+    write(0);
+end

@@ -1,0 +1,13 @@
+decl
+    int x, y;
+enddecl
+begin
+    x = 10;
+    write(x);
+    read(x);
+    y = x + 2;
+    write(y);
+    x = 7;
+    write(y);
+    write(x);
+end

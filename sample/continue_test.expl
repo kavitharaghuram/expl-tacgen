@@ -1,0 +1,13 @@
+decl
+    int x;
+enddecl
+begin
+    x = 3;
+    while (x > 0) do
+        x = x - 1;
+        if (x == 1) then
+            continue;
+        endif
+        write(x);
+    endwhile
+end

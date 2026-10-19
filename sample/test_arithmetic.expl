@@ -1,0 +1,13 @@
+decl
+    int a, b, c, d;
+enddecl
+begin
+    a = 2 + 3 * 4;
+    b = (2 + 3) * 4;
+    c = -5 + 8;
+    d = 17 % 5;
+    write(a);
+    write(b);
+    write(c);
+    write(d);
+end

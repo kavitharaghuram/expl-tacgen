@@ -1,0 +1,8 @@
+decl
+    int x;
+enddecl
+begin
+    x = 10;
+    read(x);
+    write(x);
+end

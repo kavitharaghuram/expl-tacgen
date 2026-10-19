@@ -1,0 +1,20 @@
+decl
+    int i, j;
+enddecl
+begin
+    i = 2;
+    while (i > 0) do
+        j = 3;
+        while (j > 0) do
+            j = j - 1;
+            if (j == 1) then
+                continue;
+            endif
+            if (j == 0) then
+                break;
+            endif
+            write(j);
+        endwhile
+        i = i - 1;
+    endwhile
+end

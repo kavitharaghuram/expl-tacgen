@@ -1,0 +1,17 @@
+decl
+    str s, t;
+enddecl
+begin
+    s = "hello";
+    t = "world";
+    write(s);
+    write(t);
+    if (s == t) then
+        write("same");
+    else
+        write("different");
+    endif
+    if (s != t) then
+        write("not equal");
+    endif
+end

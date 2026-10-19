@@ -1,0 +1,11 @@
+decl
+    int x;
+enddecl
+begin
+    read(x);
+    if (x > 0) then
+        write(1);
+    else
+        write(2);
+    endif
+end

@@ -1,0 +1,25 @@
+decl
+    int a, b;
+enddecl
+begin
+    read(a);
+    read(b);
+    if (a < b) then
+        write(1);
+    endif
+    if (a > b) then
+        write(2);
+    endif
+    if (a <= b) then
+        write(3);
+    endif
+    if (a >= b) then
+        write(4);
+    endif
+    if (a == b) then
+        write(5);
+    endif
+    if (a != b) then
+        write(6);
+    endif
+end

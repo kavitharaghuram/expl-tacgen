@@ -1,0 +1,19 @@
+decl
+    int x, y;
+enddecl
+begin
+    read(x);
+    read(y);
+    if (x > 0 && y > 0) then
+        write(1);
+    endif
+    if (x > 0 || y > 0) then
+        write(2);
+    endif
+    if (!(x == 0)) then
+        write(3);
+    endif
+    if ((x > 0 && y > 0) || x == 5) then
+        write(4);
+    endif
+end
