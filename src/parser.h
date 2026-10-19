@@ -62,7 +62,7 @@ extern int yydebug;
     YYUNDEF = 257,                 /* "invalid token"  */
     DECL = 258,                    /* DECL  */
     ENDDECL = 259,                 /* ENDDECL  */
-    BEGIN = 260,                   /* BEGIN  */
+    BEG = 260,                     /* BEG  */
     END = 261,                     /* END  */
     INT = 262,                     /* INT  */
     STR = 263,                     /* STR  */

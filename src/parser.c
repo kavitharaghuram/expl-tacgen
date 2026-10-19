@@ -113,7 +113,7 @@ enum yysymbol_kind_t
   YYSYMBOL_YYUNDEF = 2,                    /* "invalid token"  */
   YYSYMBOL_DECL = 3,                       /* DECL  */
   YYSYMBOL_ENDDECL = 4,                    /* ENDDECL  */
-  YYSYMBOL_BEGIN = 5,                      /* BEGIN  */
+  YYSYMBOL_BEG = 5,                        /* BEG  */
   YYSYMBOL_END = 6,                        /* END  */
   YYSYMBOL_INT = 7,                        /* INT  */
   YYSYMBOL_STR = 8,                        /* STR  */
@@ -570,9 +570,9 @@ static const char *yysymbol_name (yysymbol_kind_t yysymbol) YY_ATTRIBUTE_UNUSED;
 static const char *const yytname[] =
 {
   "\"end of file\"", "error", "\"invalid token\"", "DECL", "ENDDECL",
-  "BEGIN", "END", "INT", "STR", "IF", "THEN", "ELSE", "ENDIF", "WHILE",
-  "DO", "ENDWHILE", "READ", "WRITE", "BREAK", "CONTINUE", "RETURN", "AND",
-  "OR", "NOT", "LT", "GT", "LE", "GE", "EQ", "NE", "NUMBER", "ID",
+  "BEG", "END", "INT", "STR", "IF", "THEN", "ELSE", "ENDIF", "WHILE", "DO",
+  "ENDWHILE", "READ", "WRITE", "BREAK", "CONTINUE", "RETURN", "AND", "OR",
+  "NOT", "LT", "GT", "LE", "GE", "EQ", "NE", "NUMBER", "ID",
   "STRING_LITERAL", "'+'", "'-'", "'*'", "'/'", "'%'", "UMINUS", "';'",
   "','", "'='", "'('", "')'", "$accept", "program", "declarations",
   "declaration", "type", "identifier_list", "statements", "statement",
@@ -1214,7 +1214,7 @@ yyreduce:
   YY_REDUCE_PRINT (yyn);
   switch (yyn)
     {
-  case 2: /* program: DECL declarations ENDDECL BEGIN statements END  */
+  case 2: /* program: DECL declarations ENDDECL BEG statements END  */
 #line 65 "src/parser.y"
       {
           parse_result = make_program((yyvsp[-4].decl), (yyvsp[-1].stmt));
