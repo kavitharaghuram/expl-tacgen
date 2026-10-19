@@ -10,7 +10,18 @@ static QList ql;
 static char loop_begin_stack[MAX_LOOP_DEPTH][32];
 static char loop_end_stack[MAX_LOOP_DEPTH][32];
 static int loop_depth = 0;
+static Operand temp_operand(void)
+{
+    char *name = new_temp();
+    int id = atoi(name + 1);
+    return mk_temp(id);
+}
 
+static Operand label_operand(const char *name)
+{
+    int id = atoi(name + 1);
+    return mk_label(id);
+}
 static void push_loop(const char *lbegin, const char *lend) {
     if (loop_depth < MAX_LOOP_DEPTH) {
         strncpy(loop_begin_stack[loop_depth], lbegin, 31);
@@ -67,7 +78,7 @@ static Operand emit_expr(Expr *e) {
         case EXPR_UNARY:
             if (e->data.unary.op == AST_NEG) {
                 Operand op1 = emit_expr(e->data.unary.operand);
-                Operand res = mk_var(new_temp());
+                Operand res = temp_operand();
                 qlist_add(&ql, new_quad(OP_NEG, REL_NONE, op1, mk_none(), res));
                 return res;
             }
@@ -78,7 +89,7 @@ static Operand emit_expr(Expr *e) {
             if (op == AST_ADD || op == AST_SUB || op == AST_MUL || op == AST_DIV || op == AST_MOD) {
                 Operand op1 = emit_expr(e->data.binary.left);
                 Operand op2 = emit_expr(e->data.binary.right);
-                Operand res = mk_var(new_temp());
+                Operand res = temp_operand();
                 qlist_add(&ql, new_quad(get_arith_op(op), REL_NONE, op1, op2, res));
                 return res;
             }
@@ -102,7 +113,7 @@ static void emit_cond(Expr *e, const char *label_true, const char *label_false) 
         if (op == AST_AND) {
             char *next_label = strdup(new_label());
             emit_cond(e->data.binary.left, next_label, label_false);
-            qlist_add(&ql, new_quad(OP_LABEL, REL_NONE, mk_none(), mk_none(), mk_var(next_label)));
+            qlist_add(&ql, new_quad(OP_LABEL, REL_NONE, mk_none(), mk_none(), label_operand(next_label)));
             emit_cond(e->data.binary.right, label_true, label_false);
             free(next_label);
             return;
@@ -110,7 +121,7 @@ static void emit_cond(Expr *e, const char *label_true, const char *label_false) 
         if (op == AST_OR) {
             char *next_label = strdup(new_label());
             emit_cond(e->data.binary.left, label_true, next_label);
-            qlist_add(&ql, new_quad(OP_LABEL, REL_NONE, mk_none(), mk_none(), mk_var(next_label)));
+            qlist_add(&ql, new_quad(OP_LABEL, REL_NONE, mk_none(), mk_none(), label_operand(next_label)));
             emit_cond(e->data.binary.right, label_true, label_false);
             free(next_label);
             return;
@@ -119,8 +130,8 @@ static void emit_cond(Expr *e, const char *label_true, const char *label_false) 
         if (rop != REL_NONE) {
             Operand op1 = emit_expr(e->data.binary.left);
             Operand op2 = emit_expr(e->data.binary.right);
-            qlist_add(&ql, new_quad(OP_IFREL, rop, op1, op2, mk_var(label_true)));
-            qlist_add(&ql, new_quad(OP_GOTO, REL_NONE, mk_none(), mk_none(), mk_var(label_false)));
+            qlist_add(&ql, new_quad(OP_IFREL, rop, op1, op2, label_operand(label_true)));
+            qlist_add(&ql, new_quad(OP_GOTO, REL_NONE, mk_none(), mk_none(), label_operand(label_false)));
             return;
         }
     }
@@ -151,17 +162,17 @@ static void emit_stmt(Stmt *s) {
 
                 emit_cond(s->data.if_stmt.condition, l_true, l_false);
 
-                qlist_add(&ql, new_quad(OP_LABEL, REL_NONE, mk_none(), mk_none(), mk_var(l_true)));
+                qlist_add(&ql, new_quad(OP_LABEL, REL_NONE, mk_none(), mk_none(), label_operand(l_true)));
                 emit_stmt(s->data.if_stmt.then_body);
 
                 if (s->data.if_stmt.else_body) {
-                    qlist_add(&ql, new_quad(OP_GOTO, REL_NONE, mk_none(), mk_none(), mk_var(l_end)));
-                    qlist_add(&ql, new_quad(OP_LABEL, REL_NONE, mk_none(), mk_none(), mk_var(l_false)));
+                    qlist_add(&ql, new_quad(OP_GOTO, REL_NONE, mk_none(), mk_none(), label_operand(l_end)));
+                    qlist_add(&ql, new_quad(OP_LABEL, REL_NONE, mk_none(), mk_none(), label_operand(l_false)));
                     emit_stmt(s->data.if_stmt.else_body);
-                    qlist_add(&ql, new_quad(OP_LABEL, REL_NONE, mk_none(), mk_none(), mk_var(l_end)));
+                    qlist_add(&ql, new_quad(OP_LABEL, REL_NONE, mk_none(), mk_none(), label_operand(l_end)));
                     free(l_end);
                 } else {
-                    qlist_add(&ql, new_quad(OP_LABEL, REL_NONE, mk_none(), mk_none(), mk_var(l_false)));
+                    qlist_add(&ql, new_quad(OP_LABEL, REL_NONE, mk_none(), mk_none(), label_operand(l_false)));
                 }
 
                 free(l_true);
@@ -173,16 +184,16 @@ static void emit_stmt(Stmt *s) {
                 char *l_body = strdup(new_label());
                 char *l_end = strdup(new_label());
 
-                qlist_add(&ql, new_quad(OP_LABEL, REL_NONE, mk_none(), mk_none(), mk_var(l_begin)));
+                qlist_add(&ql, new_quad(OP_LABEL, REL_NONE, mk_none(), mk_none(), label_operand(l_begin)));
                 emit_cond(s->data.while_stmt.condition, l_body, l_end);
 
-                qlist_add(&ql, new_quad(OP_LABEL, REL_NONE, mk_none(), mk_none(), mk_var(l_body)));
+                qlist_add(&ql, new_quad(OP_LABEL, REL_NONE, mk_none(), mk_none(), label_operand(l_body)));
                 push_loop(l_begin, l_end);
                 emit_stmt(s->data.while_stmt.body);
                 pop_loop();
 
-                qlist_add(&ql, new_quad(OP_GOTO, REL_NONE, mk_none(), mk_none(), mk_var(l_begin)));
-                qlist_add(&ql, new_quad(OP_LABEL, REL_NONE, mk_none(), mk_none(), mk_var(l_end)));
+                qlist_add(&ql, new_quad(OP_GOTO, REL_NONE, mk_none(), mk_none(), label_operand(l_begin)));
+                qlist_add(&ql, new_quad(OP_LABEL, REL_NONE, mk_none(), mk_none(), label_operand(l_end)));
 
                 free(l_begin);
                 free(l_body);
@@ -191,13 +202,13 @@ static void emit_stmt(Stmt *s) {
             }
             case STMT_BREAK:
                 if (loop_depth > 0) {
-                    qlist_add(&ql, new_quad(OP_GOTO, REL_NONE, mk_none(), mk_none(), mk_var(loop_end_stack[loop_depth - 1])));
+                    qlist_add(&ql, new_quad(OP_GOTO, REL_NONE, mk_none(), mk_none(), label_operand(loop_end_stack[loop_depth - 1])));
                 }
                 break;
 
             case STMT_CONTINUE:
                 if (loop_depth > 0) {
-                    qlist_add(&ql, new_quad(OP_GOTO, REL_NONE, mk_none(), mk_none(), mk_var(loop_begin_stack[loop_depth - 1])));
+                    qlist_add(&ql, new_quad(OP_GOTO, REL_NONE, mk_none(), mk_none(), label_operand(loop_begin_stack[loop_depth - 1])));
                 }
                 break;
 
