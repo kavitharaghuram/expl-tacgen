@@ -1,3 +1,3 @@
 p = a * b
-r = p + p
 q = p
+r = p + p

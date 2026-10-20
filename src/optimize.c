@@ -213,7 +213,23 @@ static void emit_finals(Ctx *c)
         cur_set(c, v, n);
     }
 }
+static void emit_finals_for_node(Ctx *c, DagNode *n)
+{
+    for (int i = 0; i < c->nfin; i++) {
+        if (c->fin_done[i] || c->fin_node[i] != n)
+            continue;
 
+        Operand v = c->fin_var[i];
+        Operand s = src(c, n);
+
+        c->rem[n->id]--;
+        c->fin_done[i] = 1;
+
+        guard_overwrite(c, v);
+        emit(c, OP_COPY, REL_NONE, s, mk_none(), v);
+        cur_set(c, v, n);
+    }
+}
 Quad *optimize_block(Block *b, int *n)
 {
     if (!b || b->n == 0) {
@@ -358,6 +374,7 @@ Quad *optimize_block(Block *b, int *n)
             emit_write(&c, nd);
         } else {
             emit_compute(&c, nd);
+            emit_finals_for_node(&c, nd);
         }
     }
 
