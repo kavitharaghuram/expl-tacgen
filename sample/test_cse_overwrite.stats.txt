@@ -1,0 +1,7 @@
+ExpL TAC Optimizer statistics
+Source file          : sample/test_cse_overwrite.expl
+Basic blocks         : 1
+Quads before         : 10
+Quads after          : 7
+Constant foldings    : 0
+CSE eliminations     : 1

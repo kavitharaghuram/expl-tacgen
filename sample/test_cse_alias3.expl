@@ -1,0 +1,22 @@
+decl
+    int a, b, c, d, e, f, x, y, r, s, u;
+enddecl
+begin
+    read(a);
+    read(b);
+    read(c);
+    read(d);
+    read(e);
+    read(f);
+    x = a + b;
+    a = 5;
+    y = a + b;
+    r = c * d;
+    s = c * d + 1;
+    u = (e + f) * (e + f);
+    write(x);
+    write(y);
+    write(r);
+    write(s);
+    write(u);
+end

@@ -1,0 +1,15 @@
+decl
+    int a, b, x, y, i;
+enddecl
+begin
+    read(a);
+    read(b);
+    i = 0;
+    x = a + b;
+    while (i < 3) do
+        y = a + b;
+        write(y);
+        i = i + 1;
+    endwhile
+    write(x);
+end
