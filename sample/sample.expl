@@ -1,19 +1,25 @@
 decl
-    int a, b, c, t, x, y;
+    int a, b, c, d, e, t, x, y;
 enddecl
 begin
     t = 2 + 3;
-    x = t * 4;
-    y = 10 / 2 + 1;
+    x = 10 * 4;
+    y = 20 / 2 + 1;
+
     read(a);
     read(b);
-    c = a + b * 2;
+    c = (a * b) + 5;
+    d = (a * b) - 2;
+    e = (a + b) * (a + b);
+
     while (c > 0) do
         if (c == 5) then
             break;
         endif
         c = c - 1;
     endwhile
+    write(d);
+    write(e);
     write(c);
     return 0;
 end
